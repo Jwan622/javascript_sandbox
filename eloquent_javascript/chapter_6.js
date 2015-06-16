@@ -105,6 +105,26 @@ var blackRabbit = new Rabbit("black");
 console.log(blackRabbit.type);
 
 
+function Rabbit(type) {
+  this.type = type;
+}
+
+Rabbit.prototype.teeth = "blue"
+// In this line, Rabbit is a constructor and I am creating a prototype on this constructor.
+// This prototype object has a property called teeth and its value is blue.
+
+var killerRabbit = new Rabbit("killer");
+console.log(killerRabbit.teeth);
+// In this line we look up the prototype chain and we find teeth defined on the Rabbit constructor
+
+
+console.log(Object.getPrototypeOf(killerRabbit));
+// In this line we find that the prototype of KillerRabbit is a the Rabbit prototype.
+
+var blackRabbit = new Rabbit("black");
+console.log(blackRabbit.type);
+// → black
+
 
 /* interesting enough, you can create extra methods for rabbits already created from the
 constructor in this way:
