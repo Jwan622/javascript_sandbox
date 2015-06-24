@@ -135,3 +135,120 @@ promise.then(function(result) {
 
 "then" takes two arguments, a callback for a success case, and another for the
 failure case. Both are optional, so you can add a callback for the success or failure case only.
+
+*/
+
+// this is more another async example, not a promise:
+
+var id = 1;
+function getId(callback) {
+  // Generate new id by counting id up
+  var myId = id++;
+
+  // Asynchronous result
+  window.setTimeout(function() {
+
+      // After random time run callback with id
+      callback(myId);
+
+  }, 1000 * Math.random());
+}
+
+function outputValue(value) {
+    // Output value to console
+    console.log("Your id: ", value);
+}
+
+getId(outputValue);
+getId(outputValue);
+
+
+// this is the above example as a promise
+
+var id = 1;
+function getId() {
+
+    // Create promise object
+    var promise = new core.event.Promise();
+
+    // Generate new id by counting id up
+    var myId = id++;
+
+    // Asynchronous result
+    window.setTimeout(function() {
+
+        // After random time
+        // fulfill promise with id
+        promise.fulfill(myId);
+
+    }, 1000 * Math.random());
+
+    // Return promise to caller
+    return promise;
+
+}
+
+function outputValue(value) {
+    // Output value to console
+    console.log("Your id: ", value);
+}
+
+getId().then(outputValue);
+getId().then(outputValue);
+
+
+// The above promise code has no advantage over the first one. Now lets expand the code a bit.
+// Here is a promise code that is actually useful since it handles errors:
+
+var id = 1;
+function getId() {
+
+    // Create promise object
+    var promise = new core.event.Promise();
+
+    // Generate new id by counting id up
+    var myId = id++;
+
+    // Asynchronous result
+    window.setTimeout(function() {
+
+        // So this is a simulation of failure;
+        // If a random value is below or
+        // equal 0.5 I take it as an failure.
+        if (Math.random() > 0.5) {
+
+            // After random time
+            // fulfill promise with id
+            promise.fulfill(myId);
+
+        } else {
+
+            // After random time reject promise
+            promise.reject("Service failure");
+
+        }
+
+    }, 1000 * Math.random());
+
+    // Return promise to caller
+    return promise;
+
+}
+
+function outputValue(value) {
+    // Output value to console
+    console.log("Your id: ", value);
+}
+
+function errorHandler(reason) {
+    // Output error reason to console
+    console.log("Error happened: ", reason);
+}
+
+getId().then(outputValue, errorHandler);
+getId().then(outputValue, errorHandler);
+
+
+/* what is the above code doing. look at the function call getId().then(outputValue) first. You call getId() which
+   calls setTimeout. It then has a random generator. If it's greater than 0.5 (fulfilled), then it runs outputValue
+   which logs the myId value to console.
